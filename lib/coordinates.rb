@@ -11,6 +11,10 @@ class Coordinates
     column_mapping[@column] + @row.to_s
   end
 
+  def +(other)
+    Coordinates.new(@row + other.row, @column + other.column)
+  end
+
   private
 
   def column_mapping
