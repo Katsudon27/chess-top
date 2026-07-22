@@ -18,4 +18,9 @@ class Square
   def empty?
     @piece.nil?
   end
+
+  def clear
+    @piece = nil
+    @possible_moves = []
+  end
 end
