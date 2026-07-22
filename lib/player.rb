@@ -6,4 +6,9 @@ class Player
     @name = name
     @pieces = pieces
   end
+
+  def choose_piece
+    puts "#{@name}'s turn: Please choose a piece to be moved."
+    gets.chomp.to_s
+  end
 end
