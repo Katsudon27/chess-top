@@ -14,4 +14,8 @@ class Square
   def add_piece(piece)
     @piece = piece
   end
+
+  def empty?
+    @piece.nil?
+  end
 end
