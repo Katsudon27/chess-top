@@ -20,4 +20,19 @@ describe Coordinates do
       end
     end
   end
+
+  describe "valid?" do
+    context "when the coordinates is [0,0]" do
+      it "returns true" do
+        expect(coordinates.valid?).to be true
+      end
+    end
+
+    context "when the coordinates is [8,8]" do
+      it "returns false" do
+        test = described_class.new(8, 8)
+        expect(test.valid?).to be false
+      end
+    end
+  end
 end
