@@ -1,5 +1,9 @@
+require_relative "../coordinates"
+require_relative "../conversion"
+
 # A class to represent a piece on a chess board
 class Piece
+  include Conversion
   attr_reader :symbol
 
   def initialize(symbol)
