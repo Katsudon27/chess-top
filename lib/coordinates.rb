@@ -11,7 +11,7 @@ class Coordinates
   end
 
   def to_s
-    column_mapping[x_coord] + (y_coord + 1).to_s
+    column_mapping[@x_coord] + (@y_coord + 1).to_s
   end
 
   def +(other)
