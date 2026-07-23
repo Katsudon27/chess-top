@@ -8,7 +8,7 @@ class Coordinates
   end
 
   def to_s
-    column_mapping[@column] + @row.to_s
+    column_mapping[@column] + (@row + 1).to_s
   end
 
   def +(other)
