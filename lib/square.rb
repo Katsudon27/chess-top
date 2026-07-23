@@ -4,9 +4,9 @@ require_relative "coordinates"
 class Square
   attr_reader :symbol, :piece
 
-  def initialize(symbol, row, col)
+  def initialize(symbol, x_coord, y_coord)
     @symbol = symbol
-    @coordinates = Coordinates.new(row, col)
+    @coordinates = Coordinates.new(x_coord, y_coord)
     @piece = nil
     @possible_moves = []
   end
