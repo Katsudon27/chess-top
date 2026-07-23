@@ -8,6 +8,7 @@ class Piece
 
   def initialize(symbol)
     @symbol = symbol
+    @max_distance = 8
   end
 
   def possible_moves(current_position)
@@ -16,7 +17,7 @@ class Piece
     @movement_offsets.each do |movement_offset|
       movement = Coordinates.new(movement_offset[0], movement_offset[1])
       temp = current_coordinates
-      loop do
+      @max_distance.times do
         move = temp + movement
         break unless move.valid?
 
