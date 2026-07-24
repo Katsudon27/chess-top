@@ -8,4 +8,9 @@ class Pawn < Piece
     @max_distance = 2
     @moved = false
   end
+
+  def already_moved
+    @moved = true
+    @max_distance = 1
+  end
 end
