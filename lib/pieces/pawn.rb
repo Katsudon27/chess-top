@@ -9,8 +9,31 @@ class Pawn < Piece
     @moved = false
   end
 
+  def possible_moves(current_position, replacement = "")
+    promote(replacement) unless replacement == ""
+    super(current_position)
+  end
+
   def already_moved
     @moved = true
     @max_distance = 1
+  end
+
+  private
+
+  def promote(replacement)
+    case replacement
+    when "Q"
+      @movement_offsets = [[1, 1], [-1, 1], [1, -1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]
+      @max_distance = 8
+    when "N"
+      @movement_offsets = [[2, 1], [2, -1], [1, 2], [1, -2], [-2, 1], [-2, -1], [-1, 2], [-1, -2]]
+    when "R"
+      @movement_offsets = [[1, 0], [-1, 0], [0, 1], [0, -1]]
+      @max_distance = 8
+    when "B"
+      @movement_offsets = [[1, 1], [-1, 1], [1, -1], [-1, -1]]
+      @max_distance = 8
+    end
   end
 end
