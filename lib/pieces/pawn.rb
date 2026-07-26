@@ -9,17 +9,10 @@ class Pawn < Piece
     @moved = false
   end
 
-  def possible_moves(current_position, replacement = "")
-    promote(replacement) unless replacement == ""
-    super(current_position)
-  end
-
   def already_moved
     @moved = true
     @max_distance = 1
   end
-
-  private
 
   def promote(replacement)
     case replacement
