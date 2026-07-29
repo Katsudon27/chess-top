@@ -4,11 +4,12 @@ require_relative "../conversion"
 # A class to represent a piece on a chess board
 class Piece
   include Conversion
-  attr_reader :symbol
+  attr_reader :symbol, :color
 
-  def initialize(symbol)
+  def initialize(symbol, color)
     @symbol = symbol
     @max_distance = 8
+    @color = color
   end
 
   def possible_moves(current_position)
