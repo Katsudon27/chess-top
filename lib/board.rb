@@ -12,16 +12,14 @@ class Board
   include Conversion
   attr_accessor :board
 
-  WHITE_PIECES = { king: "\u2654", queen: "\u2655", rook: "\u2656", bishop: "\u2657", knight: "\u2658",
-                   pawn: "\u2659" }.freeze
-  BLACK_PIECES = { king: "\u265A", queen: "\u265B", rook: "\u265C", bishop: "\u265D", knight: "\u265E",
-                   pawn: "\u265F" }.freeze
+  PIECES = { king: "\u265A", queen: "\u265B", rook: "\u265C", bishop: "\u265D", knight: "\u265E",
+             pawn: "\u265F" }.freeze
 
   def initialize
     @board = []
     setup_board
-    setup_pieces(0, 1, BLACK_PIECES)
-    setup_pieces(7, 6, WHITE_PIECES)
+    setup_pieces(0, 1, PIECES, "black")
+    setup_pieces(7, 6, PIECES, "white")
   end
 
   def display
@@ -38,24 +36,24 @@ class Board
       row = []
       8.times do |col_idx|
         row << if (row_idx + col_idx).even?
-                 Square.new("green", col_idx, row_idx)
+                 Square.new("darkslategray", col_idx, row_idx)
                else
-                 Square.new("white", col_idx, row_idx)
+                 Square.new("webgray", col_idx, row_idx)
                end
       end
       @board << row
     end
   end
 
-  def setup_pieces(start_row, pawn_row, pieces)
-    @board[pawn_row].each { |square| square.add_piece(Pawn.new(pieces[:pawn])) }
-    @board[start_row][0].add_piece(Rook.new(pieces[:rook]))
-    @board[start_row][1].add_piece(Knight.new(pieces[:knight]))
-    @board[start_row][2].add_piece(Bishop.new(pieces[:bishop]))
-    @board[start_row][3].add_piece(Queen.new(pieces[:queen]))
-    @board[start_row][4].add_piece(King.new(pieces[:king]))
-    @board[start_row][5].add_piece(Bishop.new(pieces[:bishop]))
-    @board[start_row][6].add_piece(Knight.new(pieces[:knight]))
-    @board[start_row][7].add_piece(Rook.new(pieces[:rook]))
+  def setup_pieces(start_row, pawn_row, pieces, color)
+    @board[pawn_row].each { |square| square.add_piece(Pawn.new(pieces[:pawn], color)) }
+    @board[start_row][0].add_piece(Rook.new(pieces[:rook], color))
+    @board[start_row][1].add_piece(Knight.new(pieces[:knight], color))
+    @board[start_row][2].add_piece(Bishop.new(pieces[:bishop], color))
+    @board[start_row][3].add_piece(Queen.new(pieces[:queen], color))
+    @board[start_row][4].add_piece(King.new(pieces[:king], color))
+    @board[start_row][5].add_piece(Bishop.new(pieces[:bishop], color))
+    @board[start_row][6].add_piece(Knight.new(pieces[:knight], color))
+    @board[start_row][7].add_piece(Rook.new(pieces[:rook], color))
   end
 end

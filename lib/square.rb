@@ -1,5 +1,5 @@
 require_relative "coordinates"
-require "colorize"
+require "rainbow"
 
 # A class that is used to represent a square of the chess board
 class Square
@@ -29,6 +29,10 @@ class Square
   end
 
   def symbol
-    @symbol.colorize(background: @color.to_sym)
+    if empty?
+      Rainbow(@symbol).bg(@color.to_sym)
+    else
+      Rainbow(@symbol).color(@piece.color.to_sym).bg(@color.to_sym)
+    end
   end
 end
