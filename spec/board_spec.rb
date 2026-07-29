@@ -31,5 +31,15 @@ describe Board do
         expect(chess_board.export).to eq(answer)
       end
     end
+
+    context "when pawn at e2 is moved to e4" do
+      before do
+        chess_board.move_piece("e2", "e4")
+      end
+      it "returns the correct notation" do
+        answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
+        expect(chess_board.export).to eq(answer)
+      end
+    end
   end
 end
