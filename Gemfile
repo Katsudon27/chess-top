@@ -10,4 +10,5 @@ gem "rspec", "~> 3.13"
 
 gem "rubocop-rspec", "~> 3.10"
 
-gem "colorize", "~> 1.1"
+
+gem "rainbow", "~> 3.1"
