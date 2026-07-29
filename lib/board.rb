@@ -38,12 +38,12 @@ class Board
         if square.empty?
           empty_squares += 1
         else
-          row_notation += empty_squares unless empty_squares.zero?
+          row_notation += empty_squares.to_s unless empty_squares.zero?
           row_notation += square.piece.notation
           empty_squares = 0
         end
       end
-      row_notation += empty_squares.to_s if row_notation.empty?
+      row_notation += empty_squares.to_s unless empty_squares.zero?
       notation << row_notation
     end
     notation.join("/")
