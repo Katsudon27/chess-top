@@ -6,8 +6,7 @@ class Piece
   include Conversion
   attr_reader :symbol, :color
 
-  def initialize(symbol, color)
-    @symbol = symbol
+  def initialize(color)
     @max_distance = 8
     @color = color
   end

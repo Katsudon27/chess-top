@@ -12,14 +12,11 @@ class Board
   include Conversion
   attr_accessor :board
 
-  PIECES = { king: "\u265A", queen: "\u265B", rook: "\u265C", bishop: "\u265D", knight: "\u265E",
-             pawn: "\u265F" }.freeze
-
   def initialize
     @board = []
     setup_board
-    setup_pieces(0, 1, PIECES, "black")
-    setup_pieces(7, 6, PIECES, "white")
+    setup_pieces(0, 1, "black")
+    setup_pieces(7, 6, "white")
   end
 
   def display
@@ -76,15 +73,15 @@ class Board
     @board[7 - coordinates.y_coord][coordinates.x_coord]
   end
 
-  def setup_pieces(start_row, pawn_row, pieces, color)
-    @board[pawn_row].each { |square| square.add_piece(Pawn.new(pieces[:pawn], color)) }
-    @board[start_row][0].add_piece(Rook.new(pieces[:rook], color))
-    @board[start_row][1].add_piece(Knight.new(pieces[:knight], color))
-    @board[start_row][2].add_piece(Bishop.new(pieces[:bishop], color))
-    @board[start_row][3].add_piece(Queen.new(pieces[:queen], color))
-    @board[start_row][4].add_piece(King.new(pieces[:king], color))
-    @board[start_row][5].add_piece(Bishop.new(pieces[:bishop], color))
-    @board[start_row][6].add_piece(Knight.new(pieces[:knight], color))
-    @board[start_row][7].add_piece(Rook.new(pieces[:rook], color))
+  def setup_pieces(start_row, pawn_row, color)
+    @board[pawn_row].each { |square| square.add_piece(Pawn.new(color)) }
+    @board[start_row][0].add_piece(Rook.new(color))
+    @board[start_row][1].add_piece(Knight.new(color))
+    @board[start_row][2].add_piece(Bishop.new(color))
+    @board[start_row][3].add_piece(Queen.new(color))
+    @board[start_row][4].add_piece(King.new(color))
+    @board[start_row][5].add_piece(Bishop.new(color))
+    @board[start_row][6].add_piece(Knight.new(color))
+    @board[start_row][7].add_piece(Rook.new(color))
   end
 end
