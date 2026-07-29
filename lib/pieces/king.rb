@@ -6,5 +6,6 @@ class King < Piece
     super(symbol, color)
     @movement_offsets = [[1, 1], [-1, 1], [1, -1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]
     @max_distance = 1
+    @letter = "k"
   end
 end

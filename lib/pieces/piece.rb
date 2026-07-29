@@ -28,4 +28,12 @@ class Piece
     end
     results
   end
+
+  def notation
+    if color == "black"
+      @letter
+    else
+      @letter.upcase
+    end
+  end
 end

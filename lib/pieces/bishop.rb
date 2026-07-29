@@ -5,5 +5,6 @@ class Bishop < Piece
   def initialize(symbol, color)
     super(symbol, color)
     @movement_offsets = [[1, 1], [-1, 1], [1, -1], [-1, -1]]
+    @letter = "b"
   end
 end

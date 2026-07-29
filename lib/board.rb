@@ -29,6 +29,26 @@ class Board
     puts "   1  2  3  4  5  6  7  8"
   end
 
+  def export
+    notation = []
+    @board.each do |row|
+      row_notation = ""
+      empty_squares = 0
+      row.each do |square|
+        if square.empty?
+          empty_squares += 1
+        else
+          row_notation += empty_squares unless empty_squares.zero?
+          row_notation += square.piece.notation
+          empty_squares = 0
+        end
+      end
+      row_notation += empty_squares.to_s if row_notation.empty?
+      notation << row_notation
+    end
+    notation.join("/")
+  end
+
   private
 
   def setup_board

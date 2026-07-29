@@ -5,5 +5,6 @@ class Queen < Piece
   def initialize(symbol, color)
     super(symbol, color)
     @movement_offsets = [[1, 1], [-1, 1], [1, -1], [-1, -1], [1, 0], [-1, 0], [0, 1], [0, -1]]
+    @letter = "q"
   end
 end

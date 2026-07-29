@@ -7,6 +7,7 @@ class Pawn < Piece
     @movement_offsets = [[0, 1]]
     @max_distance = 2
     @moved = false
+    @letter = "p"
   end
 
   def already_moved

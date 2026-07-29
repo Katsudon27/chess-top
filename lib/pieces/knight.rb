@@ -6,5 +6,6 @@ class Knight < Piece
     super(symbol, color)
     @movement_offsets = [[2, 1], [2, -1], [1, 2], [1, -2], [-2, 1], [-2, -1], [-1, 2], [-1, -2]]
     @max_distance = 1
+    @letter = "n"
   end
 end
