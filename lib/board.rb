@@ -49,6 +49,13 @@ class Board
     notation.join("/")
   end
 
+  def move_piece(start, target)
+    start_square = find_square(convert_notation(start))
+    target_square = find_square(convert_notation(target))
+    target_square.add_piece(start_square.piece)
+    start_square.clear
+  end
+
   private
 
   def setup_board
@@ -63,6 +70,10 @@ class Board
       end
       @board << row
     end
+  end
+
+  def find_square(coordinates)
+    @board[7 - coordinates.y_coord][coordinates.x_coord]
   end
 
   def setup_pieces(start_row, pawn_row, pieces, color)
