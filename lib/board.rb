@@ -6,6 +6,7 @@ require_relative "pieces/queen"
 require_relative "pieces/rook"
 require_relative "pieces/bishop"
 require_relative "pieces/king"
+require_relative "pieces/piece_factory"
 
 # A class that represents the Chess Board in this project
 class Board
@@ -53,6 +54,21 @@ class Board
     start_square.clear
   end
 
+  def import(notation)
+    clear
+    notation.split("/").each_with_index do |row, row_idx|
+      target_row = @board[row_idx]
+      square_idx = 0
+      row.split("").each do |placement|
+        unless numeric?(placement)
+          target_row[square_idx].add_piece(PieceFactory.for(placement))
+          square_idx += 1
+        end
+        placement.to_i.times { square_idx += 1 }
+      end
+    end
+  end
+
   private
 
   def setup_board
@@ -83,5 +99,11 @@ class Board
     @board[start_row][5].add_piece(Bishop.new(color))
     @board[start_row][6].add_piece(Knight.new(color))
     @board[start_row][7].add_piece(Rook.new(color))
+  end
+
+  def clear
+    @board.each do |row|
+      row.each { |square| square.clear unless square.empty? }
+    end
   end
 end

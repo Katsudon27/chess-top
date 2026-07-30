@@ -12,4 +12,10 @@ module Conversion
     coordinate_values = notation.split("")
     Coordinates.new(column_mapping.key(coordinate_values[0]), notation[1].to_i - 1)
   end
+
+  def numeric?(string)
+    true if Float(string)
+  rescue StandardError
+    false
+  end
 end
