@@ -1,11 +1,5 @@
 require_relative "square"
 require_relative "conversion"
-require_relative "pieces/pawn"
-require_relative "pieces/knight"
-require_relative "pieces/queen"
-require_relative "pieces/rook"
-require_relative "pieces/bishop"
-require_relative "pieces/king"
 require_relative "pieces/piece_factory"
 
 # A class that represents the Chess Board in this project
@@ -16,8 +10,8 @@ class Board
   def initialize
     @board = []
     setup_board
-    setup_pieces(0, 1, "black")
-    setup_pieces(7, 6, "white")
+    setup_pieces(0, 1)
+    setup_pieces(7, 6, "w")
   end
 
   def display
@@ -89,16 +83,15 @@ class Board
     @board[7 - coordinates.y_coord][coordinates.x_coord]
   end
 
-  def setup_pieces(start_row, pawn_row, color)
-    @board[pawn_row].each { |square| square.add_piece(Pawn.new(color)) }
-    @board[start_row][0].add_piece(Rook.new(color))
-    @board[start_row][1].add_piece(Knight.new(color))
-    @board[start_row][2].add_piece(Bishop.new(color))
-    @board[start_row][3].add_piece(Queen.new(color))
-    @board[start_row][4].add_piece(King.new(color))
-    @board[start_row][5].add_piece(Bishop.new(color))
-    @board[start_row][6].add_piece(Knight.new(color))
-    @board[start_row][7].add_piece(Rook.new(color))
+  def setup_pieces(start_row, pawn_row, color = "b")
+    pieces = %w[p r n b q k]
+    pieces = pieces.map(&:upcase) if color == "w"
+    @board[pawn_row].each { |square| square.add_piece(PieceFactory.for(pieces[0])) }
+    [0, 7].each { |idx| @board[start_row][idx].add_piece(PieceFactory.for(pieces[1])) }
+    [1, 6].each { |idx| @board[start_row][idx].add_piece(PieceFactory.for(pieces[2])) }
+    [2, 5].each { |idx| @board[start_row][idx].add_piece(PieceFactory.for(pieces[3])) }
+    @board[start_row][3].add_piece(PieceFactory.for(pieces[4]))
+    @board[start_row][4].add_piece(PieceFactory.for(pieces[5]))
   end
 
   def clear
