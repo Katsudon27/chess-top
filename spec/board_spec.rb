@@ -36,8 +36,19 @@ describe Board do
       before do
         chess_board.move_piece("e2", "e4")
       end
+
       it "returns the correct notation" do
         answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
+        expect(chess_board.export).to eq(answer)
+      end
+    end
+  end
+
+  describe "#import" do
+    context "when called with a notation of move 1.e4 from starting position" do
+      it "changes the current board positions to match the provided notation" do
+        answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
+        chess_board.import(answer)
         expect(chess_board.export).to eq(answer)
       end
     end
