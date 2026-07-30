@@ -11,4 +11,8 @@ class GameController
     @game_board = board
     @current_player = @player1
   end
+
+  def switch_turn
+    @current_player = @current_player == @player1 ? @player2 : @player1
+  end
 end
