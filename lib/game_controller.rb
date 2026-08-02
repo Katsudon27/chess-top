@@ -17,4 +17,8 @@ class GameController
   def switch_turn
     @current_player = @current_player == @player1 ? @player2 : @player1
   end
+
+  def move_piece(start, target)
+    @game_board.move_piece(start, target)
+  end
 end
