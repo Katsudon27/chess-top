@@ -10,6 +10,8 @@ class GameController
     @player2 = player2
     @game_board = board
     @current_player = @player1
+    @half_moves = 0
+    @full_moves = 0
   end
 
   def switch_turn
