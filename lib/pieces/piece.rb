@@ -11,7 +11,7 @@ class Piece
     @color = color
   end
 
-  def possible_moves(current_position)
+  def possible_moves(current_position, board)
     results = []
     current_coordinates = convert_notation(current_position)
     @movement_offsets.each do |movement_offset|
@@ -20,6 +20,12 @@ class Piece
       @max_distance.times do
         move = temp + movement
         break unless move.valid?
+
+        square = board.find_square(move)
+        unless square.empty?
+          results << move.to_s if square.piece.color != @color
+          break
+        end
 
         results << move.to_s
         temp = move
