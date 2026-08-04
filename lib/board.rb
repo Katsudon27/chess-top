@@ -84,6 +84,7 @@ class Board
   def populate_possible_moves(position)
     square = find_square(convert_notation(position))
     square.possible_moves = square.piece.possible_moves(position, self)
+    highlight_squares(square.possible_moves)
   end
 
   def find_square(coordinates)
@@ -106,6 +107,14 @@ class Board
   def clear
     @board.each do |row|
       row.each { |square| square.clear unless square.empty? }
+    end
+  end
+
+  def highlight_squares(notations)
+    notations.each do |notation|
+      square = find_square(convert_notation(notation))
+      puts square
+      square.add_highlight
     end
   end
 end
