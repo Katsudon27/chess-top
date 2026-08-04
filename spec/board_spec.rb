@@ -2,7 +2,9 @@ require_relative "../lib/board"
 require_relative "../lib/pieces/knight"
 
 describe Board do
-  subject(:chess_board) { described_class.new }
+  subject(:chess_board) { described_class.new(empty_board) }
+
+  let(:empty_board) { described_class.setup_board }
 
   let(:board) { chess_board.instance_variable_get(:@board) }
 
@@ -48,8 +50,8 @@ describe Board do
     context "when called with a notation of move 1.e4 from starting position" do
       it "changes the current board positions to match the provided notation" do
         answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR"
-        chess_board.import(answer)
-        expect(chess_board.export).to eq(answer)
+        test_board = described_class.import(answer)
+        expect(test_board.export).to eq(answer)
       end
     end
   end

@@ -7,9 +7,10 @@ class Board
   include Conversion
   attr_accessor :board
 
-  def initialize
-    @board = []
-    setup_board
+  def initialize(board = [], import: false)
+    @board = board
+    return unless import == false
+
     setup_pieces(0, 1)
     setup_pieces(7, 6, "w")
   end
@@ -48,24 +49,24 @@ class Board
     start_square.clear
   end
 
-  def import(notation)
-    clear
+  def self.import(notation)
+    board = setup_board
     notation.split("/").each_with_index do |row, row_idx|
-      target_row = @board[row_idx]
+      target_row = board[row_idx]
       square_idx = 0
       row.split("").each do |placement|
-        unless numeric?(placement)
+        if placement.to_i.zero?
           target_row[square_idx].add_piece(PieceFactory.for(placement))
           square_idx += 1
         end
         placement.to_i.times { square_idx += 1 }
       end
     end
+    new(board, import: true)
   end
 
-  private
-
-  def setup_board
+  def self.setup_board
+    board = []
     7.downto(0) do |row_idx|
       row = []
       8.times do |col_idx|
@@ -75,9 +76,12 @@ class Board
                  Square.new("webgray", col_idx, row_idx)
                end
       end
-      @board << row
+      board << row
     end
+    board
   end
+
+  private
 
   def find_square(coordinates)
     @board[7 - coordinates.y_coord][coordinates.x_coord]
