@@ -81,11 +81,16 @@ class Board
     board
   end
 
-  private
+  def populate_possible_moves(position)
+    square = find_square(convert_notation(position))
+    square.possible_moves = square.piece.possible_moves(position, self)
+  end
 
   def find_square(coordinates)
     @board[7 - coordinates.y_coord][coordinates.x_coord]
   end
+
+  private
 
   def setup_pieces(start_row, pawn_row, color = "b")
     pieces = %w[p r n b q k]
