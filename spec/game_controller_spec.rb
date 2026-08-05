@@ -61,8 +61,6 @@ describe GameController do
   end
 
   describe "#export" do
-    let(:target_square) { instance_double(Square) }
-
     before do
       allow(game_board).to receive(:move_piece)
     end
@@ -79,41 +77,17 @@ describe GameController do
     end
 
     context "when white makes the move 1.e4" do
+      subject(:game_controller) do
+        described_class.import("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+      end
+
       before do
-        allow(game_board).to receive(:export).and_return("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR")
-        allow(game_board).to receive(:find_square).with("e2").and_return(start_square)
-        allow(game_board).to receive(:find_square).with("e4").and_return(target_square)
-        allow(start_square).to receive(:piece).and_return(pawn)
-        allow(pawn).to receive(:is_a?).and_return(true)
-        allow(target_square).to receive(:empty?).and_return(true)
         game_controller.move_piece("e2", "e4")
         game_controller.switch_turn
       end
 
-      it "returns the correct notation and not increment the fullmove number" do
+      it "returns the correct notation" do
         answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
-        expect(game_controller.export).to eq(answer)
-      end
-    end
-
-    context "when black makes the move 1...c5" do
-      before do
-        allow(game_board).to receive(:export).and_return("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR")
-        allow(game_board).to receive(:find_square).with("e2").and_return(start_square)
-        allow(game_board).to receive(:find_square).with("e4").and_return(target_square)
-        allow(game_board).to receive(:find_square).with("c7").and_return(start_square)
-        allow(game_board).to receive(:find_square).with("c5").and_return(target_square)
-        allow(start_square).to receive(:piece).and_return(pawn)
-        allow(pawn).to receive(:is_a?).and_return(true)
-        allow(target_square).to receive(:empty?).and_return(true)
-        game_controller.move_piece("e2", "e4")
-        game_controller.switch_turn
-        game_controller.move_piece("c7", "c5")
-        game_controller.switch_turn
-      end
-
-      it "returns the correct notation and increments the fullmove number" do
-        answer = "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
         expect(game_controller.export).to eq(answer)
       end
     end
@@ -125,6 +99,53 @@ describe GameController do
         answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
         test_game = described_class.import(answer)
         expect(test_game.export).to eq(answer)
+      end
+    end
+  end
+
+  describe "#move_piece" do
+    context "when white makes the move 1.e4" do
+      subject(:game_controller) do
+        described_class.import("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+      end
+
+      it "does not increase the full move counter" do
+        game_controller.move_piece("e2", "e4")
+        expect(game_controller.instance_variable_get(:@full_moves)).to eq(1)
+      end
+
+      it "does not increase the half move counter" do
+        game_controller.move_piece("e2", "e4")
+        expect(game_controller.instance_variable_get(:@half_moves)).to eq(0)
+      end
+    end
+
+    context "when black makes the move 1...c5" do
+      subject(:game_controller) do
+        described_class.import("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1")
+      end
+
+      before do
+        game_controller.move_piece("c7", "c5")
+      end
+
+      it "increases the full move counter" do
+        expect(game_controller.instance_variable_get(:@full_moves)).to eq(2)
+      end
+
+      it "does not increase the half move counter" do
+        expect(game_controller.instance_variable_get(:@half_moves)).to eq(0)
+      end
+    end
+
+    context "when white makes the move 2.Nf3" do
+      subject(:game_controller) do
+        described_class.import("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq c6 0 2")
+      end
+
+      it "increases the half move counter" do
+        game_controller.move_piece("g1", "f3")
+        expect(game_controller.instance_variable_get(:@half_moves)).to eq(1)
       end
     end
   end
