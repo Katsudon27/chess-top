@@ -1,10 +1,10 @@
 # A class that represents the player for the Chess game
 class Player
-  attr_reader :name, :symbol
+  attr_reader :name, :color
 
-  def initialize(name, pieces)
+  def initialize(name, color)
     @name = name
-    @pieces = pieces
+    @color = color
   end
 
   def choose_piece
