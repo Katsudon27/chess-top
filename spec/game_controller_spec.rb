@@ -2,6 +2,7 @@ require_relative "../lib/game_controller"
 require_relative "../lib/board"
 require_relative "../lib/player"
 require_relative "../lib/square"
+require_relative "../lib/pieces/knight"
 require_relative "../lib/pieces/pawn"
 
 describe GameController do
@@ -10,8 +11,13 @@ describe GameController do
   let(:first_player) { instance_double(Player) }
   let(:second_player) { instance_double(Player) }
   let(:game_board) { instance_double(Board) }
-  let(:square) { instance_double(Square) }
+  let(:start_square) { instance_double(Square) }
   let(:pawn) { instance_double(Pawn) }
+
+  before do
+    allow(first_player).to receive(:color).and_return("white")
+    allow(second_player).to receive(:color).and_return("black")
+  end
 
   describe "#switch_turn" do
     context "when the current player is player 1" do
@@ -24,8 +30,8 @@ describe GameController do
 
   describe "#valid_move?" do
     before do
-      allow(game_board).to receive(:find_square).and_return(square)
-      allow(square).to receive_messages(possible_moves: %w[e3 e4], piece: pawn)
+      allow(game_board).to receive(:find_square).and_return(start_square)
+      allow(start_square).to receive_messages(possible_moves: %w[e3 e4], piece: pawn)
       allow(pawn).to receive(:color).and_return("white")
       allow(first_player).to receive(:color).and_return("white")
       allow(second_player).to receive(:color).and_return("black")
@@ -50,6 +56,65 @@ describe GameController do
 
       it "returns false" do
         expect(game_controller.valid_move?("e2", "e4")).to be false
+      end
+    end
+  end
+
+  describe "#export" do
+    let(:target_square) { instance_double(Square) }
+
+    before do
+      allow(game_board).to receive(:move_piece)
+    end
+
+    context "when at starting position" do
+      before do
+        allow(game_board).to receive(:export).and_return("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+      end
+
+      it "returns the correct notation" do
+        answer = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
+        expect(game_controller.export).to eq(answer)
+      end
+    end
+
+    context "when white makes the move 1.e4" do
+      before do
+        allow(game_board).to receive(:export).and_return("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR")
+        allow(game_board).to receive(:find_square).with("e2").and_return(start_square)
+        allow(game_board).to receive(:find_square).with("e4").and_return(target_square)
+        allow(start_square).to receive(:piece).and_return(pawn)
+        allow(pawn).to receive(:is_a?).and_return(true)
+        allow(target_square).to receive(:empty?).and_return(true)
+        game_controller.move_piece("e2", "e4")
+        game_controller.switch_turn
+      end
+
+      it "returns the correct notation and not increment the fullmove number" do
+        answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        expect(game_controller.export).to eq(answer)
+      end
+    end
+
+    context "when black makes the move 1...c5" do
+      before do
+        allow(game_board).to receive(:export).and_return("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR")
+        allow(game_board).to receive(:find_square).with("e2").and_return(start_square)
+        allow(game_board).to receive(:find_square).with("e4").and_return(target_square)
+        allow(game_board).to receive(:find_square).with("c7").and_return(start_square)
+        allow(game_board).to receive(:find_square).with("c5").and_return(target_square)
+        allow(start_square).to receive(:piece).and_return(pawn)
+        allow(pawn).to receive(:is_a?).and_return(true)
+        allow(target_square).to receive(:empty?).and_return(true)
+        game_controller.move_piece("e2", "e4")
+        game_controller.switch_turn
+        game_controller.move_piece("c7", "c5")
+        game_controller.switch_turn
+      end
+
+      it "returns the correct notation and increments the fullmove number" do
+        answer = "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+        expect(game_controller.export).to eq(answer)
       end
     end
   end
