@@ -118,4 +118,14 @@ describe GameController do
       end
     end
   end
+
+  describe "self.#import" do
+    context "when called with a notation of move 1.e4 from starting position" do
+      it "changes the current FEN specification to match the provided notation" do
+        answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        test_game = described_class.import(answer)
+        expect(test_game.export).to eq(answer)
+      end
+    end
+  end
 end
