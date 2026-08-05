@@ -7,14 +7,20 @@ require_relative "pieces/piece"
 class GameController
   attr_reader :current_player
 
-  def initialize(player1, player2, board)
-    @player1 = player1
-    @player2 = player2
+  def initialize(white_player, black_player, board, current_player = "w", moves = [0, 1])
+    @player1 = white_player
+    @player2 = black_player
     @game_board = board
-    @current_player = @player1
-    @half_moves = 0
-    @full_moves = 1
-    @first_move = true
+
+    @current_player = if current_player == "w"
+                        @player1
+                      else
+                        @player2
+                      end
+
+    @half_moves = moves[0]
+    @full_moves = moves[1]
+    @first_move = @full_moves == 1
   end
 
   def switch_turn
@@ -63,5 +69,28 @@ class GameController
 
     export_notation += " #{@half_moves}"
     export_notation + " #{@full_moves}"
+  end
+
+  def self.import(import_notation)
+    notation_array = import_notation.split(" ")
+    board = Board.import(notation_array[0])
+    current_player = notation_array[1]
+    white_castling_rights = ""
+    black_castling_rights = ""
+
+    if notation_array[2] != "-"
+      white_castling_rights += "K" if notation_array.include?("K")
+      white_castling_rights += "Q" if notation_array.include?("Q")
+      black_castling_rights += "k" if notation_array.include?("k")
+      black_castling_rights += "q" if notation_array.include?("q")
+    end
+
+    player1 = Player.new("White", "white", white_castling_rights)
+    player2 = Player.new("Black", "black", black_castling_rights)
+
+    # TODO: En passant square for notation_array[3]
+
+    moves = [notation_array[4], notation_array[5]]
+    new(player1, player2, board, current_player, moves)
   end
 end

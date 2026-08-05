@@ -2,9 +2,18 @@
 class Player
   attr_reader :name, :color
 
-  def initialize(name, color)
+  def initialize(name, color, castling_rights = "")
     @name = name
     @color = color
+    unless castling_rights.empty?
+      castling_rights.downcase.split("").each do |castling_right|
+        @kingside_castle = castling_right == "k"
+        @queenside_castle = castling_right == "q"
+      end
+    end
+
+    @kingside_castle = false
+    @queenside_castle = false
   end
 
   def choose_piece
