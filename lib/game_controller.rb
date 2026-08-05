@@ -18,9 +18,8 @@ class GameController
                         @player2
                       end
 
-    @half_moves = moves[0]
-    @full_moves = moves[1]
-    @first_move = @full_moves == 1
+    @half_moves = moves[0].to_i
+    @full_moves = moves[1].to_i
   end
 
   def switch_turn
@@ -28,8 +27,6 @@ class GameController
   end
 
   def move_piece(start, target)
-    @game_board.move_piece(start, target)
-
     start_square = @game_board.find_square(start)
     target_square = @game_board.find_square(target)
 
@@ -39,8 +36,9 @@ class GameController
       @half_moves += 1
     end
 
-    @full_moves += 1 if @first_move == false
-    @first_move = false if @first_move == true
+    @full_moves += 1 if @current_player == @player2
+
+    @game_board.move_piece(start, target)
   end
 
   def valid_move?(start, target)
