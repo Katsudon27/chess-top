@@ -21,7 +21,7 @@ class Piece
         move = temp + movement
         break unless move.valid?
 
-        square = board.find_square(move)
+        square = board.find_square(move.to_s)
         unless square.empty?
           results << move.to_s if square.piece.color != @color
           break

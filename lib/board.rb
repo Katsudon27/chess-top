@@ -43,8 +43,8 @@ class Board
   end
 
   def move_piece(start, target)
-    start_square = find_square(convert_notation(start))
-    target_square = find_square(convert_notation(target))
+    start_square = find_square(start)
+    target_square = find_square(target)
     target_square.add_piece(start_square.piece)
     start_square.clear
   end
@@ -82,12 +82,13 @@ class Board
   end
 
   def populate_possible_moves(position)
-    square = find_square(convert_notation(position))
+    square = find_square(position)
     square.possible_moves = square.piece.possible_moves(position, self)
     highlight_squares(square.possible_moves)
   end
 
-  def find_square(coordinates)
+  def find_square(notation)
+    coordinates = convert_notation(notation)
     @board[7 - coordinates.y_coord][coordinates.x_coord]
   end
 
@@ -112,8 +113,7 @@ class Board
 
   def highlight_squares(notations)
     notations.each do |notation|
-      square = find_square(convert_notation(notation))
-      puts square
+      square = find_square(notation)
       square.add_highlight
     end
   end
