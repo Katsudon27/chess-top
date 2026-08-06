@@ -13,7 +13,7 @@ describe Pawn do
       end
     end
 
-    context "when the piece is at d3" do
+    context "when the piece has already moved to d3" do
       let(:game_board) { Board.import("8/8/8/8/8/3P4/8/8") }
 
       before do
@@ -22,6 +22,26 @@ describe Pawn do
 
       it "can only take one step forward" do
         expect(pawn.possible_moves("d3", game_board)).to eq(%w[d4])
+      end
+    end
+
+    context "when the piece has two enemy pieces on its front diagonal squares" do
+      let(:game_board) { Board.import("rnbqkbnr/pppppp2/8/2p1p3/3P4/8/PPP1PPPP/RNBQKBNR") }
+
+      before do
+        pawn.already_moved
+      end
+
+      it "can attack both enemy pieces" do
+        expect(pawn.possible_moves("d4", game_board).sort).to eq(%w[d5 e5 c5].sort)
+      end
+    end
+
+    context "when the piece has an enemy piece in front of it" do
+      let(:game_board) { Board.import("rnbqkbnr/ppp1pppp/8/8/8/3p4/PPPPPPPP/RNBQKBNR") }
+
+      it "returns an empty array" do
+        expect(pawn.possible_moves("d2", game_board)).to be_empty
       end
     end
   end
