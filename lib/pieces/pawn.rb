@@ -5,8 +5,7 @@ class Pawn < Piece
   def initialize(color)
     super(color)
     @symbol = "\u265F"
-    @movement_offsets = [[0, 1]]
-    @attacking_offsets = [[1, 1], [-1, 1]]
+    assign_offsets(color)
     @max_distance = 2
     @moved = false
     @letter = "p"
@@ -65,5 +64,15 @@ class Pawn < Piece
       results << move.to_s if square.piece.color != @color
     end
     results
+  end
+
+  def assign_offsets(color)
+    if color == "white"
+      @movement_offsets = [[0, 1]]
+      @attacking_offsets = [[1, 1], [-1, 1]]
+    else
+      @movement_offsets = [[0, -1]]
+      @attacking_offsets = [[1, -1], [-1, -1]]
+    end
   end
 end
