@@ -64,6 +64,17 @@ describe Pawn do
         expect(pawn.possible_moves("e7", game_board).sort).to eq(%w[f6 d6 e5 e6].sort)
       end
     end
+
+    context "when an en passant capture is possible" do
+      subject(:pawn) { described_class.new("black") }
+
+      let(:game_board) { Board.import("rnbqkbnr/pppppppp/3P1P2/8/8/8/PPP1P1PP/RNBQKBNR") }
+
+      it "can take the white pawn with en passant" do
+        game_board.en_passant_square = "d3"
+        expect(pawn.possible_moves("c4", game_board).sort).to eq(%w[c3 d3])
+      end
+    end
   end
 
   describe "#promote" do
