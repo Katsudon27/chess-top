@@ -3,7 +3,7 @@ require "rainbow"
 
 # A class that is used to represent a square of the chess board
 class Square
-  attr_reader :piece
+  attr_reader :piece, :coordinates
   attr_accessor :possible_moves
 
   def initialize(color, x_coord, y_coord)

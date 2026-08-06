@@ -5,10 +5,11 @@ require_relative "pieces/piece_factory"
 # A class that represents the Chess Board in this project
 class Board
   include Conversion
-  attr_accessor :board
+  attr_accessor :en_passant_square
 
   def initialize(board = [], import: false)
     @board = board
+    @en_passant_square = "-"
     return unless import == false
 
     setup_pieces(0, 1)
@@ -45,6 +46,9 @@ class Board
   def move_piece(start, target)
     start_square = find_square(start)
     target_square = find_square(target)
+
+    en_passant(start_square, target_square)
+
     target_square.add_piece(start_square.piece)
     start_square.clear
   end
@@ -94,17 +98,6 @@ class Board
 
   private
 
-  def setup_pieces(start_row, pawn_row, color = "b")
-    pieces = %w[p r n b q k]
-    pieces = pieces.map(&:upcase) if color == "w"
-    @board[pawn_row].each { |square| square.add_piece(PieceFactory.for(pieces[0])) }
-    [0, 7].each { |idx| @board[start_row][idx].add_piece(PieceFactory.for(pieces[1])) }
-    [1, 6].each { |idx| @board[start_row][idx].add_piece(PieceFactory.for(pieces[2])) }
-    [2, 5].each { |idx| @board[start_row][idx].add_piece(PieceFactory.for(pieces[3])) }
-    @board[start_row][3].add_piece(PieceFactory.for(pieces[4]))
-    @board[start_row][4].add_piece(PieceFactory.for(pieces[5]))
-  end
-
   def clear
     @board.each do |row|
       row.each { |square| square.clear unless square.empty? }
@@ -115,6 +108,22 @@ class Board
     notations.each do |notation|
       square = find_square(notation)
       square.add_highlight
+    end
+  end
+
+  def en_passant(start_square, target_square)
+    if start_square.piece.is_a?(Pawn)
+      if target_square.coordinates.to_s == @en_passant_square
+        offset = en_passant_offset(start_square)
+        find_square((target_square.coordinates + offset).to_s).clear
+        @en_passant_square = "-"
+      elsif (target_square.coordinates - start_square.coordinates).y_coord.even?
+        @en_passant_square = start_square.possible_moves[0]
+      else
+        @en_passant_square = "-"
+      end
+    elsif @en_passant_square != "-" && target_square.coordinates.to_s != @en_passant_square
+      @en_passant_square = "-"
     end
   end
 end

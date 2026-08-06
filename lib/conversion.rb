@@ -18,4 +18,12 @@ module Conversion
   rescue StandardError
     false
   end
+
+  def en_passant_offset(start_square)
+    if start_square.piece.color == "white"
+      Coordinates.new(0, -1)
+    else
+      Coordinates.new(0, 1)
+    end
+  end
 end
