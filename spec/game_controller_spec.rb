@@ -67,7 +67,8 @@ describe GameController do
 
     context "when at starting position" do
       before do
-        allow(game_board).to receive(:export).and_return("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
+        allow(game_board).to receive_messages(en_passant_square: "-",
+                                              export: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR")
       end
 
       it "returns the correct notation" do
@@ -82,12 +83,13 @@ describe GameController do
       end
 
       before do
+        game_controller.instance_variable_get(:@game_board).populate_possible_moves("e2")
         game_controller.move_piece("e2", "e4")
         game_controller.switch_turn
       end
 
       it "returns the correct notation" do
-        answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1"
+        answer = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1"
         expect(game_controller.export).to eq(answer)
       end
     end
