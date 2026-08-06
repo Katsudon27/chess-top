@@ -44,6 +44,26 @@ describe Pawn do
         expect(pawn.possible_moves("d2", game_board)).to be_empty
       end
     end
+
+    context "when the black piece is at original position of d7" do
+      subject(:pawn) { described_class.new("black") }
+
+      let(:game_board) { Board.import("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR") }
+
+      it "can take one or two step downwards on the board" do
+        expect(pawn.possible_moves("d7", game_board).sort).to eq(%w[d5 d6])
+      end
+    end
+
+    context "when the black piece has two enemy pieces on its front diagonal squares" do
+      subject(:pawn) { described_class.new("black") }
+
+      let(:game_board) { Board.import("rnbqkbnr/pppppppp/3P1P2/8/8/8/PPP1P1PP/RNBQKBNR") }
+
+      it "can attack both enemy pieces" do
+        expect(pawn.possible_moves("e7", game_board).sort).to eq(%w[f6 d6 e5 e6].sort)
+      end
+    end
   end
 
   describe "#promote" do
