@@ -62,8 +62,7 @@ class GameController
     # TODO: Castling rights
     export_notation += " KQkq"
 
-    # TODO: En passant square
-    export_notation += " -"
+    export_notation += " #{@game_board.en_passant_square}"
 
     export_notation += " #{@half_moves}"
     export_notation + " #{@full_moves}"
@@ -86,7 +85,7 @@ class GameController
     player1 = Player.new("White", "white", white_castling_rights)
     player2 = Player.new("Black", "black", black_castling_rights)
 
-    # TODO: En passant square for notation_array[3]
+    board.en_passant_square = notation_array[3]
 
     moves = [notation_array[4], notation_array[5]]
     new(player1, player2, board, current_player, moves)
