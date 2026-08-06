@@ -18,6 +18,10 @@ class Coordinates
     Coordinates.new(@x_coord + other.x_coord, @y_coord + other.y_coord)
   end
 
+  def -(other)
+    Coordinates.new(@x_coord - other.x_coord, @y_coord - other.y_coord)
+  end
+
   def valid?
     @x_coord.between?(0, 7) && @y_coord.between?(0, 7)
   end
