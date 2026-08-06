@@ -59,9 +59,9 @@ class Pawn < Piece
       next unless move.valid?
 
       square = board.find_square(move.to_s)
-      next if square.empty?
+      next if square.empty? && board.en_passant_square != move.to_s
 
-      results << move.to_s if square.piece.color != @color
+      results << move.to_s if board.en_passant_square == move.to_s || square.piece.color != @color
     end
     results
   end
